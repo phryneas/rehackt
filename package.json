@@ -3,6 +3,11 @@
   "version": "0.0.1",
   "description": "A wrapper around React that will hide hooks from the React Server Component compiler",
   "author": "Lenz Weber-Tronic",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phryneas/rehackt.git"
+  },
+  "homepage": "https://github.com/phryneas/rehackt",
   "license": "MIT",
   "peerDependencies": {
     "react": "*"
