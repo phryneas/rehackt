@@ -1,0 +1,18 @@
+{
+  "name": "rehackt",
+  "version": "0.0.1",
+  "description": "A wrapper around React that will hide hooks from the React Server Component compiler",
+  "author": "Lenz Weber-Tronic",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "*"
+  },
+  "main": "index.js",
+  "exports": {
+    ".": {
+      "react-server": "./rsc.js",
+      "default": "./index.js"
+    },
+    "./package.json": "./package.json"
+  }
+}
