@@ -1,1 +1,2 @@
-export * from 'react'
+"use strict";
+module.exports = require("react");
