@@ -22,7 +22,8 @@
     "index.js",
     "index.d.ts",
     "rsc.js",
-    "package.json"
+    "package.json",
+    "README.md"
   ],
   "peerDependencies": {
     "react": "*",
