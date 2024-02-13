@@ -69,7 +69,7 @@ Maybe one of these should be marked as a client entry with "use client":
 ./src/app/action.ts
 ```
 
-This is because Next.js statically analyzes usage of `useState` to ensure it's not being utilized in a `useState`.
+This is because Next.js statically analyzes usage of `useState` to ensure it's not being utilized in server-only code.
 
 By replacing the import from `react` to `rehackt`:
 
