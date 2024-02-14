@@ -1,5 +1,12 @@
 // @ts-check
 
+if (0) {
+  // Trick cjs-module-lexer into adding named exports for all React exports.
+  // (if imported with `import()`, they will appear in `.default` as well.)
+  // This way, cjs-module-lexer will let all of react's (named) exports through unchanged.
+  module.exports = require("react");
+}
+
 // missing functions
 module.exports.createContext = polyfillMissingFn("createContext");
 module.exports.createFactory = polyfillMissingFn("createFactory");
@@ -40,12 +47,7 @@ module.exports.createFactory ||= function unsupportedCreateFactory() {
   };
 };
 
-if (0) {
-  // Trick cjs-module-lexer into adding named exports for all React exports.
-  // (if imported with `import()`, they will appear in `.default` as well.)
-  // This way, cjs-module-lexer will let all of react's (named) exports through unchanged.
-  module.exports = require("react");
-}
+// actually overwrite everything with the original module
 Object.assign(module.exports, require("react"));
 
 function polyfillMissingFn(exportName) {
