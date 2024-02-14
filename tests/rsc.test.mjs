@@ -1,6 +1,7 @@
 // @ts-check
 import assert from "node:assert";
-import { describe, test, it } from "node:test";
+import { describe, test, it, skip } from "node:test";
+import { version as ReactVersion } from "react";
 
 const missingFunctions = [
   "act",
@@ -24,76 +25,65 @@ const missingFactories = ["createContext", "createFactory"];
 
 const missingClasses = ["Component", "PureComponent"];
 
-test("Shim has the exports that React is missing", async (t) => {
+describe("Shim has the exports that React is missing", async () => {
   const React = await import("react");
   const Shim = await import("../rsc.js");
-  for (const missingFunction of [...missingFactories, ...missingFunctions, ...missingClasses]) {
-    await t.test(missingFunction, async (t) => {
-      await t.test(`Shim.${missingFunction} exists`, () => {
-        assert.equal(typeof Shim[missingFunction], "function");
+  for (const missingExport of [...missingFactories, ...missingFunctions, ...missingClasses]) {
+    await describe(missingExport, async () => {
+      await it(`exists as a named export`, () => {
+        assert.equal(typeof Shim[missingExport], "function");
       });
-      await t.test(`Shim.default.${missingFunction} exists`, () => {
-        assert.equal(typeof Shim.default[missingFunction], "function");
+      await it(`exists in the default export`, () => {
+        assert.equal(typeof Shim.default[missingExport], "function");
       });
 
-      const implPairs = [
-        { label: "named export", original: React[missingFunction], shimmed: Shim[missingFunction] },
-        { label: "default export", original: React.default[missingFunction], shimmed: Shim.default[missingFunction] },
-      ];
-
-      for (const { label, original, shimmed } of implPairs) {
-        if (typeof original === "function") {
-          await t.test(`Doesn't shim if ${missingFunction} exists (${label})`, () => {
-            assert.equal(original, shimmed);
-          });
+      await test(`If react has it, we don't shim it (named export)`, (t) => {
+        if (typeof React[missingExport] === "undefined") {
+          return t.skip(becauseDoesntExist(missingExport));
         }
-      }
+        assert.equal(React[missingExport], Shim[missingExport]);
+      });
+
+      await test(`If react has it, we don't shim it (default export)`, (t) => {
+        if (typeof React.default[missingExport] === "undefined") {
+          return t.skip(becauseDoesntExist(missingExport));
+        }
+        assert.equal(React.default[missingExport], Shim.default[missingExport]);
+      });
     });
   }
 });
 
-test("functions", async (t) => {
+describe("functions", async (t) => {
   const React = await import("react");
   const Shim = await import("../rsc.js");
   for (const missingFunction of missingFunctions) {
-    await t.test(missingFunction, async (t) => {
-      await t.test(`Shim.${missingFunction} exists`, () => {
-        assert.equal(typeof Shim[missingFunction], "function");
-      });
-      await t.test(`Shim.default.${missingFunction} exists`, () => {
-        assert.equal(typeof Shim.default[missingFunction], "function");
-      });
-
-      const implPairs = [
-        { label: "named export", original: React[missingFunction], shimmed: Shim[missingFunction] },
-        { label: "default export", original: React.default[missingFunction], shimmed: Shim.default[missingFunction] },
-      ];
-
-      for (const { label, original, shimmed } of implPairs) {
-        if (typeof original === "function") {
-          // original React impl, we don't need to test it
-        } else {
-          await t.test(`Shim throws when called (${label})`, () => {
-            assert.throws(() => shimmed(), /is not available in this environment/);
-          });
+    await describe(missingFunction, async () => {
+      await test(`Shim throws when called (named)`, (t) => {
+        if (typeof React.default[missingFunction] === "function") {
+          return t.skip(becauseExists(missingFunction));
         }
-      }
+        assert.throws(() => Shim[missingFunction](), /is not available in this environment/);
+      });
+
+      await test(`Shim throws when called (default)`, (t) => {
+        if (typeof React.default[missingFunction] === "function") {
+          return t.skip(becauseExists(missingFunction));
+        }
+        assert.throws(() => Shim.default[missingFunction](), /is not available in this environment/);
+      });
     });
   }
 });
 
-const describe_unlessExists = (value) => {
-  if (value === undefined) {
-    return describe.skip;
-  } else {
-    return describe;
-  }
-};
 describe("factories", async () => {
   const React = await import("react");
   const Shim = await import("../rsc.js");
 
-  describe_unlessExists(React.createContext)("createContext", (t) => {
+  describe("createContext", () => {
+    if (typeof React.createContext === "function") {
+      return skip(becauseExists("createContext"));
+    }
     it("doesn't throw when creating a context", () => {
       assert.doesNotThrow(() => Shim.createContext());
     });
@@ -106,13 +96,24 @@ describe("factories", async () => {
     });
   });
 
-  describe_unlessExists(React.createContext)("createFactory", (t) => {
+  describe("createFactory", () => {
+    if (typeof React.createContext === "function") {
+      return skip(becauseExists("createFactory"));
+    }
     it("doesn't throw when creating a factory", () => {
       assert.doesNotThrow(() => Shim.createFactory("div"));
     });
     const createDiv = Shim.createFactory("div");
-    test("throws when calling the factory is called", () => {
+    it("throws when calling the factory is called", () => {
       assert.throws(() => createDiv({ children: "hello" }), /is not available in this environment/);
     });
   });
 });
+
+function becauseDoesntExist(name) {
+  return `React doesn't export ${name} (${ReactVersion})`;
+}
+
+function becauseExists(name) {
+  return `React exports ${name} (${ReactVersion})`;
+}
