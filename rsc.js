@@ -1,47 +1,27 @@
 // @ts-check
 
-// cjs-module-lexer will let all of react's (named) exports through unchanged.
-module.exports = { ...require("react") };
+// missing functions
+module.exports.createContext = polyfillMissingFn("createContext");
+module.exports.createFactory = polyfillMissingFn("createFactory");
+module.exports.act = polyfillMissingFn("act");
+module.exports.unstable_act = polyfillMissingFn("unstable_act");
+module.exports.unstable_useCacheRefresh = polyfillMissingFn("unstable_useCacheRefresh");
+module.exports.useContext = polyfillMissingFn("useContext");
+module.exports.useDeferredValue = polyfillMissingFn("useDeferredValue");
+module.exports.useEffect = polyfillMissingFn("useEffect");
+module.exports.useImperativeHandle = polyfillMissingFn("useImperativeHandle");
+module.exports.useInsertionEffect = polyfillMissingFn("useInsertionEffect");
+module.exports.useLayoutEffect = polyfillMissingFn("useLayoutEffect");
+module.exports.useReducer = polyfillMissingFn("useReducer");
+module.exports.useRef = polyfillMissingFn("useRef");
+module.exports.useState = polyfillMissingFn("useState");
+module.exports.useSyncExternalStore = polyfillMissingFn("useSyncExternalStore");
+module.exports.useTransition = polyfillMissingFn("useTransition");
+module.exports.useOptimistic = polyfillMissingFn("useOptimistic");
 
-const missingFunctions = [
-  "createContext",
-  "createFactory",
-  "act",
-  "unstable_act",
-  "unstable_useCacheRefresh",
-  "useContext",
-  "useDeferredValue",
-  "useEffect",
-  "useImperativeHandle",
-  "useInsertionEffect",
-  "useLayoutEffect",
-  "useReducer",
-  "useRef",
-  "useState",
-  "useSyncExternalStore",
-  "useTransition",
-  "useOptimistic",
-];
-
-const missingClasses = ["Component", "PureComponent"];
-
-missingFunctions.forEach((exportName) => {
-  module.exports[exportName] ||= function throwOnNonExistentImport() {
-    throw new Error(
-      `React functionality '${exportName}' is not available in this environment.`
-    );
-  };
-});
-
-missingClasses.forEach((exportName) => {
-  module.exports[exportName] ||= class NonExistentClass {
-    constructor() {
-      throw new Error(
-        `React class '${exportName}' is not available in this environment.`
-      );
-    }
-  };
-});
+// missing classes
+module.exports.Component = polyfillMissingClass("Component");
+module.exports.PureComponent = polyfillMissingClass("PureComponent");
 
 module.exports.createContext ||= function unsupportedCreateContext() {
   return {
@@ -60,30 +40,31 @@ module.exports.createFactory ||= function unsupportedCreateFactory() {
   };
 };
 
-// Trick cjs-module-lexer into adding named exports for these names.
-// (they will appear in `.default` as well.)
-// NOTE: these names need to appear verbatim, no variables or anything!
 if (0) {
-  const DUMMY = /** @type {any} */ (1);
-  // missingFunctions
-  module.exports.createContext = DUMMY;
-  module.exports.createFactory = DUMMY;
-  module.exports.act = DUMMY;
-  module.exports.unstable_act = DUMMY;
-  module.exports.unstable_useCacheRefresh = DUMMY;
-  module.exports.useContext = DUMMY;
-  module.exports.useDeferredValue = DUMMY;
-  module.exports.useEffect = DUMMY;
-  module.exports.useImperativeHandle = DUMMY;
-  module.exports.useInsertionEffect = DUMMY;
-  module.exports.useLayoutEffect = DUMMY;
-  module.exports.useReducer = DUMMY;
-  module.exports.useRef = DUMMY;
-  module.exports.useState = DUMMY;
-  module.exports.useSyncExternalStore = DUMMY;
-  module.exports.useTransition = DUMMY;
-  module.exports.useOptimistic = DUMMY;
-  // missingClasses
-  module.exports.Component = DUMMY;
-  module.exports.PureComponent = DUMMY;
+  // Trick cjs-module-lexer into adding named exports for all React exports.
+  // (if imported with `import()`, they will appear in `.default` as well.)
+  // This way, cjs-module-lexer will let all of react's (named) exports through unchanged.
+  module.exports = require("react");
+}
+Object.assign(module.exports, require("react"));
+
+function polyfillMissingFn(exportName) {
+  const name = "nonExistingExport__" + exportName;
+  return /** @type {any} */ (
+    {
+      [name]() {
+        throw new Error(`React functionality '${exportName}' is not available in this environment.`);
+      },
+    }[name]
+  );
+}
+
+function polyfillMissingClass(exportName) {
+  return /** @type {any} */ (
+    class NonExistentClass {
+      constructor() {
+        throw new Error(`React class '${exportName}' is not available in this environment.`);
+      }
+    }
+  );
 }
