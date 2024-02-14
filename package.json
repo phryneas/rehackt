@@ -25,6 +25,9 @@
     "package.json",
     "README.md"
   ],
+  "scripts": {
+    "test:rsc": "node --conditions react-server tests/rsc.test.mjs"
+  },
   "peerDependencies": {
     "react": "*",
     "@types/react": "*"
