@@ -30,7 +30,7 @@ module.exports.useOptimistic = polyfillMissingFn("useOptimistic");
 module.exports.Component = polyfillMissingClass("Component");
 module.exports.PureComponent = polyfillMissingClass("PureComponent");
 
-module.exports.createContext ||= function unsupportedCreateContext() {
+module.exports.createContext = function unsupportedCreateContext() {
   return {
     Provider: function throwNoContext() {
       throw new Error("Context is not available in this environment.");
@@ -41,7 +41,7 @@ module.exports.createContext ||= function unsupportedCreateContext() {
   };
 };
 
-module.exports.createFactory ||= function unsupportedCreateFactory() {
+module.exports.createFactory = function unsupportedCreateFactory() {
   return function throwNoCreateFactory() {
     throw new Error("createFactory is not available in this environment.");
   };
