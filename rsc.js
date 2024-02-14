@@ -47,7 +47,11 @@ module.exports.createFactory = function unsupportedCreateFactory() {
   };
 };
 
-// actually overwrite everything with the original module
+// Here we actually pull in the React library and add everything
+// it exports to our own `module.exports`.
+// If React suddenly were to add one of the above "polyfilled" exports,
+// the React version would overwrite our version, so this should be
+// future-proof.
 Object.assign(module.exports, require("react"));
 
 function polyfillMissingFn(exportName) {
