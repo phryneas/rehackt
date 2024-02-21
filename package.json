@@ -26,8 +26,8 @@
     "README.md"
   ],
   "peerDependencies": {
-    "react": "*",
-    "@types/react": "*"
+    "react": ">=18.2.0",
+    "@types/react": ">=18.2.57"
   },
   "peerDependenciesMeta": {
     "react": {
