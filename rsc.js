@@ -27,8 +27,8 @@ module.exports.useState = polyfillMissingFn("useState");
 module.exports.useSyncExternalStore = polyfillMissingFn("useSyncExternalStore");
 module.exports.useTransition = polyfillMissingFn("useTransition");
 module.exports.useOptimistic = polyfillMissingFn("useOptimistic");
-// We don't want bundlers to error when they encounter usage of any of these exports
-// it's up to the package author to ensure that if they access React internals,
+// We don't want bundlers to error when they encounter usage of any of these exports.
+// It's up to the package author to ensure that if they access React internals,
 // they do so in a safe way that won't break if React changes how they use these internals.
 // (e.g. only access them in development, and only in an optional way that won't
 // break if internals are not there or do not have the expected structure)
