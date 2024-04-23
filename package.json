@@ -1,6 +1,6 @@
 {
   "name": "rehackt",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "A wrapper around React that will hide hooks from the React Server Component compiler",
   "author": "Lenz Weber-Tronic",
   "repository": {
