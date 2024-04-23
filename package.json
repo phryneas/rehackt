@@ -1,6 +1,6 @@
 {
   "name": "rehackt",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "A wrapper around React that will hide hooks from the React Server Component compiler",
   "author": "Lenz Weber-Tronic",
   "repository": {
@@ -27,8 +27,8 @@
     "LICENSE.md"
   ],
   "peerDependencies": {
-    "react": "*",
-    "@types/react": "*"
+    "@types/react": "*",
+    "react": "*"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -39,8 +39,8 @@
     }
   },
   "devDependencies": {
-    "react": "^18.3.0-canary-ab31a9ed2-20230824",
-    "@types/node": "^20.5.7"
+    "@types/node": "^20.5.7",
+    "react": "^19.0.0-canary-33a32441e9-20240418"
   },
   "prettier": {
     "printWidth": 120

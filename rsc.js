@@ -9,8 +9,10 @@ if (0) {
 
 // missing functions
 module.exports.createContext = polyfillMissingFn("createContext");
+// @ts-ignore
 module.exports.createFactory = polyfillMissingFn("createFactory");
 module.exports.act = polyfillMissingFn("act");
+// @ts-ignore
 module.exports.unstable_act = polyfillMissingFn("unstable_act");
 module.exports.unstable_useCacheRefresh = polyfillMissingFn("unstable_useCacheRefresh");
 module.exports.useContext = polyfillMissingFn("useContext");
@@ -25,6 +27,17 @@ module.exports.useState = polyfillMissingFn("useState");
 module.exports.useSyncExternalStore = polyfillMissingFn("useSyncExternalStore");
 module.exports.useTransition = polyfillMissingFn("useTransition");
 module.exports.useOptimistic = polyfillMissingFn("useOptimistic");
+// We don't want bundlers to error when they encounter usage of any of these exports.
+// It's up to the package author to ensure that if they access React internals,
+// they do so in a safe way that won't break if React changes how they use these internals.
+// (e.g. only access them in development, and only in an optional way that won't
+// break if internals are not there or do not have the expected structure)
+// @ts-ignore
+module.exports.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = undefined;
+// @ts-ignore
+module.exports.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = undefined;
+// @ts-ignore
+module.exports.__SERVER_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE = undefined;
 
 // missing classes
 module.exports.Component = polyfillMissingClass("Component");
@@ -40,7 +53,7 @@ module.exports.createContext = function unsupportedCreateContext() {
     },
   };
 };
-
+// @ts-ignore
 module.exports.createFactory = function unsupportedCreateFactory() {
   return function throwNoCreateFactory() {
     throw new Error("createFactory is not available in this environment.");
