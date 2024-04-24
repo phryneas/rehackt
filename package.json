@@ -26,6 +26,9 @@
     "README.md",
     "LICENSE.md"
   ],
+  "scripts": {
+    "test:rsc": "node --conditions react-server tests/rsc.test.mjs"
+  },
   "peerDependencies": {
     "@types/react": "*",
     "react": "*"
