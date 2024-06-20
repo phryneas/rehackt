@@ -9,6 +9,7 @@
   },
   "homepage": "https://github.com/phryneas/rehackt",
   "license": "MIT",
+  "type": "commonjs",
   "main": "index.js",
   "exports": {
     ".": {
@@ -16,19 +17,29 @@
       "react-server": "./rsc.js",
       "default": "./index.js"
     },
+    "./use-sync-external-store-shim": {
+      "types": "./use-sync-external-store-shim.d.ts",
+      "react-server": "./use-sync-external-store-shim.rsc.js",
+      "default": "./use-sync-external-store-shim.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
     "index.js",
     "index.d.ts",
     "rsc.js",
+    "use-sync-external-store-shim.js",
+    "use-sync-external-store-shim.d.ts",
+    "use-sync-external-store-shim.rsc.js",
     "package.json",
     "README.md",
     "LICENSE.md"
   ],
   "peerDependencies": {
     "@types/react": "*",
-    "react": "*"
+    "@types/use-sync-external-store": "*",
+    "react": "*",
+    "use-sync-external-store": "*"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -36,13 +47,25 @@
     },
     "@types/react": {
       "optional": true
+    },
+    "use-sync-external-store": {
+      "optional": true
+    },
+    "@types/use-sync-external-store": {
+      "optional": true
     }
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.15.3",
     "@types/node": "^20.5.7",
-    "react": "^19.0.0-canary-33a32441e9-20240418"
+    "publint": "^0.2.8",
+    "react": "19.0.0-rc-e684ca66ab-20240619",
+    "use-sync-external-store": "1.4.0-rc-e684ca66ab-20240619"
   },
   "prettier": {
     "printWidth": 120
+  },
+  "scripts": {
+    "test-bundle": "attw --pack .; publint --strict"
   }
 }
