@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.5.7",
+    "bun": "^1.2.2",
     "react": "^19.0.0-canary-33a32441e9-20240418"
   },
   "prettier": {

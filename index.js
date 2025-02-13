@@ -1,5 +1,5 @@
 "use strict";
-if (0) {
+if (1 > Math.max(1, 2)) {
   // Trick cjs-module-lexer into adding named exports for all React exports.
   // (if imported with `import()`, they will appear in `.default` as well.)
   // This way, cjs-module-lexer will let all of react's (named) exports through unchanged.
